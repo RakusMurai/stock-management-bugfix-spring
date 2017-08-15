@@ -74,6 +74,7 @@
 						</td>
 					</tr>
 				</table>
+				<a href="${pageContext.request.contextPath}/book/list">一覧に戻る</a>
 			</div>
 		</div>
 	</div>
