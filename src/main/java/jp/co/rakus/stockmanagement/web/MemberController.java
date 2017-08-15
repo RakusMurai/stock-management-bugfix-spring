@@ -63,7 +63,7 @@ public class MemberController {
 		if (result.hasErrors()) {
 			return "/member/form";
 		}
-		if (form.getPassword() != form.getPasswordCheck()) {
+		if (!form.getPassword().equals(form.getPasswordCheck())) {
 			result.rejectValue("password", null, "入力されたパスワードが一致しません。");
 			result.rejectValue("passwordCheck", null, "入力されたパスワードが一致しません。");
 			return "/member/form";
