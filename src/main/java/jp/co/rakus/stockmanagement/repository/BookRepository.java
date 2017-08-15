@@ -63,4 +63,16 @@ public class BookRepository {
 		jdbcTemplate.update("UPDATE books SET stock=:stock WHERE id=:id", param);
 		return book;
 	}
+
+	public Book save(Book book) {
+		String sql = "select id,name,author,publisher,price,isbncode,saledate,explanation,image,stock from books where id = (select Max(id) from books)";
+		SqlParameterSource pram = new MapSqlParameterSource();
+		Book check = jdbcTemplate.queryForObject(sql, pram, BOOK_ROW_MAPPER);
+		book.setId(check.getId() + 1);
+		sql = "insert into books (id,name,author,publisher,price,isbncode,saledate,explanation,image,stock) values (:id,:name,:author,:publisher,:price,:isbncode,:saledate,:explanation,:image,:stock)";
+		pram = new BeanPropertySqlParameterSource(book);
+		jdbcTemplate.update(sql, pram);
+		return book;
+	}
+
 }
