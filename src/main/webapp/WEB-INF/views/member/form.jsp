@@ -33,6 +33,14 @@
 							</td>
 						</tr>
 						<tr>
+							<th>確認用パスワード</th>
+							<td>
+								<form:password path="passwordCheck" placeholder="Password" />
+								<br>
+								<form:errors path="passwordCheck"></form:errors>
+							</td>
+						</tr>
+						<tr>
 							<td></td>
 							<td>
 								<input class="btn" type="submit" value="登録">

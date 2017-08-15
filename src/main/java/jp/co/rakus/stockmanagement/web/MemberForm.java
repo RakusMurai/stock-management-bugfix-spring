@@ -20,6 +20,17 @@ public class MemberForm {
 	/** パスワード */
 	@NotBlank(message = "値を入力してください")
 	private String password;
+	/** 確認用パスワード */
+	@NotBlank(message = "値を入力してください")
+	private String passwordCheck;
+
+	public String getPasswordCheck() {
+		return passwordCheck;
+	}
+
+	public void setPasswordCheck(String passwordCheck) {
+		this.passwordCheck = passwordCheck;
+	}
 
 	public String getName() {
 		return name;
