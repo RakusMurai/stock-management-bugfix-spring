@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.rakus.stockmanagement.domain.Member;
 import jp.co.rakus.stockmanagement.service.MemberService;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+
 /**
  * メンバー関連処理を行うコントローラー.
  * 
@@ -70,6 +73,8 @@ public class MemberController {
 		}
 		Member member = new Member();
 		BeanUtils.copyProperties(form, member);
+		PasswordEncoder encoder = new StandardPasswordEncoder();
+		member.setPassword(encoder.encode(form.getPassword()));
 		member = memberService.save(member);
 		if (member.getMailAddress() == null) {
 			result.rejectValue("mailAddress", null, "すでに存在しています");
