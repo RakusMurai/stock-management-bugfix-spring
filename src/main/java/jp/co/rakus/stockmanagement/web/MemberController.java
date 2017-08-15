@@ -65,8 +65,13 @@ public class MemberController {
 		}
 		Member member = new Member();
 		BeanUtils.copyProperties(form, member);
-		memberService.save(member);
+		member = memberService.save(member);
+		if (member.getMailAddress() == null) {
+			result.rejectValue("mailAddress", null, "すでに存在しています");
+			return "/member/form";
+		}
 		return "redirect:/";
+
 	}
 
 }
