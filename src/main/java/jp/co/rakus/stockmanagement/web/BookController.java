@@ -1,9 +1,13 @@
 package jp.co.rakus.stockmanagement.web;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 
 import jp.co.rakus.stockmanagement.domain.Book;
 import jp.co.rakus.stockmanagement.service.BookService;
@@ -18,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 書籍関連処理を行うコントローラー.
@@ -32,6 +37,8 @@ public class BookController {
 
 	@Autowired
 	private BookService bookService;
+
+	private ServletContext context;
 
 	/**
 	 * フォームを初期化します.
@@ -100,15 +107,23 @@ public class BookController {
 		return list(model);
 	}
 
+	/**
+	 * 新書登録用ページの表示.
+	 */
 	@RequestMapping(value = "/form")
 	public String form(Model model) {
 		return "book/form";
 	}
 
+	/**
+	 * 新書登録.
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/save")
 	public String save(@Validated BookResistForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return "book/form";
+			return form(model);
 		}
 		Book book = new Book();
 		BeanUtils.copyProperties(form, book);
@@ -121,6 +136,27 @@ public class BookController {
 		}
 		book.setSaledate(formatDate);
 		book.setPrice(Integer.parseInt(form.getPrice()));
+
+		MultipartFile image = form.getImage();
+		if (image.isEmpty()) {
+			result.rejectValue("image", null, "画像は必須です");
+			return form(model);
+		}
+		String imageName = image.getOriginalFilename();
+		book.setImage(imageName);
+
+		try {
+			File file = new File(context.getRealPath("\\img\\" + imageName));
+			image.transferTo(file);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			return form(model);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return form(model);
+		}
+
 		bookService.save(book);
 		return "redirect:/book/list";
 	}

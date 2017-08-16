@@ -3,6 +3,7 @@ package jp.co.rakus.stockmanagement.web;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 書籍関連のリクエストパラメータが入るフォーム.
@@ -35,8 +36,7 @@ public class BookResistForm {
 	@NotBlank(message = "入力してください")
 	private String explanation;
 	/** 画像 */
-	@NotBlank(message = "入力してください")
-	private String image;
+	private MultipartFile image;
 	/** 在庫 */
 	@NotNull(message = "入力してください")
 	private Integer stock;
@@ -105,11 +105,11 @@ public class BookResistForm {
 		this.explanation = explanation;
 	}
 
-	public String getImage() {
+	public MultipartFile getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
 
