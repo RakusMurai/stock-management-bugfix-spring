@@ -87,4 +87,12 @@ public class MemberRepository {
 		}
 		return member;
 	}
+
+	public Member findByMailAddressAndPassword(String mailAddress) {
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+		Member member = jdbcTemplate.queryForObject(
+				"SELECT id,name,mail_address,password FROM members WHERE mail_address= :mailAddress ;", param,
+				MEMBER_ROW_MAPPER);
+		return member;
+	}
 }

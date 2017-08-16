@@ -2,7 +2,10 @@
 <%@ include file="../common/common.jsp"%>
 <body>
 	<div class="container">
-		<c:out value="${member.name}" />
+		<sec:authorize access="hasRole('ROLE_MEMBER') and isAuthenticated()">
+			<sec:authentication var="memberName" property="principal.member.name" />
+			<c:out value="${memberName}" />&nbsp;
+						</sec:authorize>
 		さん こんにちは！
 		<br>
 		<a href="${pageContext.request.contextPath}/logout/sessionInvalidate">ログアウト</a>
@@ -58,7 +61,7 @@
 					<tr>
 						<th>画像</th>
 						<td>
-							<img src="img/<c:out value="${book.image}"/>" />
+							<img src="data:image/png;base64,<c:out value="${book.image}"/>" />
 						</td>
 					</tr>
 					<tr>

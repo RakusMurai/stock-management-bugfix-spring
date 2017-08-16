@@ -1,13 +1,14 @@
 package jp.co.rakus.stockmanagement.web;
 
-import java.io.File;
+//import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
+//import javax.servlet.ServletContext;
 
 import jp.co.rakus.stockmanagement.domain.Book;
 import jp.co.rakus.stockmanagement.service.BookService;
@@ -38,7 +39,7 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-	private ServletContext context;
+	// private ServletContext context;
 
 	/**
 	 * フォームを初期化します.
@@ -138,24 +139,33 @@ public class BookController {
 		book.setPrice(Integer.parseInt(form.getPrice()));
 
 		MultipartFile image = form.getImage();
-		if (image.isEmpty()) {
-			result.rejectValue("image", null, "画像は必須です");
-			return form(model);
-		}
-		String imageName = image.getOriginalFilename();
-		book.setImage(imageName);
-
 		try {
-			File file = new File(context.getRealPath("\\img\\" + imageName));
-			image.transferTo(file);
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-			return form(model);
-
+			byte[] imageByte = image.getBytes();
+			String encorded = Base64.getEncoder().encodeToString(imageByte);
+			book.setImage(encorded);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return form(model);
 		}
+
+		// if (image.isEmpty()) {
+		// result.rejectValue("image", null, "画像は必須です");
+		// return form(model);
+		// }
+		// String imageName = image.getOriginalFilename();
+		// book.setImage(imageName);
+		//
+		// try {
+		// File file = new File(context.getRealPath("\\img\\" + imageName));
+		// image.transferTo(file);
+		// } catch (IllegalStateException e) {
+		// e.printStackTrace();
+		// return form(model);
+		//
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// return form(model);
+		// }
 
 		bookService.save(book);
 		return "redirect:/book/list";
