@@ -5,7 +5,7 @@
 		<h3>新書登録画面</h3>
 		<div class="span8">
 			<div class="row">
-				<form:form modelAttribute="bookForm"
+				<form:form modelAttribute="bookResistForm"
 					action="${pageContext.request.contextPath}/book/save">
 					<table class="table table-striped">
 						<tr>
@@ -67,7 +67,7 @@
 						<tr>
 							<th>画像</th>
 							<td>
-								<form:input path="image" placeholder="Image" />
+								<input type="file" value="image">
 								<br>
 								<form:errors path="image"></form:errors>
 							</td>

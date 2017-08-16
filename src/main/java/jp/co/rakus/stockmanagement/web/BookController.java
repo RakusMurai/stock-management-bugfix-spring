@@ -39,8 +39,13 @@ public class BookController {
 	 * @return フォーム
 	 */
 	@ModelAttribute
-	public BookForm setUpForm() {
+	public BookForm setUpBookForm() {
 		return new BookForm();
+	}
+
+	@ModelAttribute
+	public BookResistForm setUpResistForm() {
+		return new BookResistForm();
 	}
 
 	/**
@@ -101,7 +106,7 @@ public class BookController {
 	}
 
 	@RequestMapping(value = "/save")
-	public String save(@Validated BookForm form, BindingResult result, Model model) {
+	public String save(@Validated BookResistForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "book/form";
 		}
